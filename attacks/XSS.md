@@ -1,4 +1,4 @@
-# [Attack Type] XSS OWASP JuiceShop
+# XSS OWASP JuiceShop
 
 ---
 
