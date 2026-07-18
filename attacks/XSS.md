@@ -7,8 +7,6 @@
 | Field | Details |
 |---|---|
 | Date |11.07.2026 |
-| Start time (UTC) | 09:30 AM UTC |
-| End time (UTC) | 9:38 AM UTC |
 | Tool used | Browser |
 | OWASP Top 10 | A03:2021 - Injection  |
 | MITRE ATT&CK | T1059.007 - JavaScript  |
@@ -80,4 +78,3 @@ Policy (CSP) header on the Nginx proxy to block inline script
 execution, and a WAF rule to filter common XSS payload patterns 
 before they reach the application.
 
----

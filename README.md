@@ -27,7 +27,7 @@ Microsoft Sentinel (SIEM)
 ```
 ## Infrastructure Screenshots
 
-**Resource Group — Azure Portal**
+**Resource Group Azure Portal**
 
 ![Azure Resource Group](screenshots/resource_group.png)
 *All Azure resources deployed for the lab: VM, NSG, Log Analytics Workspace, Sentinel*
@@ -67,7 +67,7 @@ to collect real-world attack data.
 |---|---|
 | Total events | 28,300+ SecurityEvents |
 | Attacking countries | 9 (USA, UK, Vietnam, South Korea, Netherlands, Spain, India, others) |
-| Top source | Hollywood & Abingdon (United States) — 11.4k events each |
+| Top source | Hollywood & Abingdon (United States), 11.4k events each |
 | Predominant attack type | RDP Brute Force (EventID 4625) |
 
 **Attack map:**
@@ -88,7 +88,6 @@ analyzed in Microsoft Sentinel using KQL.
 |---|---|---|---|
 | SQL Injection | Complete | A03:2021 - Injection | T1190 |
 | XSS | Planned | A03:2021 - Injection | T1059.007 |
-| Brute Force | Planned | A07:2021 - Auth Failures | T1110 |
 | Directory Traversal | Planned | A01:2021 - Broken Access | T1083 |
 
 Each attack is documented in `/attacks/` with:
@@ -117,8 +116,8 @@ soc-home-lab/
 ├── README.md
 ├── attacks/
 │   ├── sql_injection.md
-│   
-│   
+│   ├── XSS.md
+│   ├── path_traversal.md
 │   
 └── screenshots/
     ├── attack_map.png
@@ -127,8 +126,7 @@ soc-home-lab/
     .
     .
     .
-    
-    
+     
 ```
 
 ---
@@ -140,7 +138,7 @@ soc-home-lab/
 - KQL (Kusto Query Language)
 - OWASP JuiceShop (Docker)
 - Nginx 1.24.0
-- Kali Linux (SQLmap, Burp Suite)
+- Kali Linux (SQLmap, Burp Suite, ffuf)
 
 ---
 

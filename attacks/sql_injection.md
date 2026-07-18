@@ -6,8 +6,6 @@
 | Field | Details |
 |---|---|
 | Date | 28.06.2026 |
-| Start time (UTC) | 02:07 PM UTC |
-| End time (UTC) | 02:59 PM UTC |
 | Tool used | e.g. SQLmap, Burp Suite, Browser |
 | OWASP Top 10 | e.g. A03:2021 - Injection |
 | MITRE ATT&CK | e.g. T1190 - Exploit Public-Facing Application |
