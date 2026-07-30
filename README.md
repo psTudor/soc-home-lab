@@ -87,14 +87,19 @@ analyzed in Microsoft Sentinel using KQL.
 | Attack | Status | OWASP | MITRE ATT&CK |
 |---|---|---|---|
 | SQL Injection | Complete | A03:2021 - Injection | T1190 |
-| XSS | Planned | A03:2021 - Injection | T1059.007 |
-| Directory Traversal | Planned | A01:2021 - Broken Access | T1083 |
+| XSS | Complete | A03:2021 - Injection | T1059.007 |
+| Directory Traversal | Complete | A01:2021 - Broken Access | T1083 |
 
-Each attack is documented in `/attacks/` with:
+Each attack is documented in [attacks](./attacks) with:
 - Step-by-step execution and commands used
 - Attack screenshots and results
 - KQL detection query
 - Detection analysis in Sentinel
+  
+### MITRE ATT&CK Coverage
+
+Visual detection coverage against the MITRE framework.
+![MITRE Coverage](./screenshots/MITRE%20coverage.png)
 
 ---
 
@@ -108,6 +113,10 @@ Nginx access.log
     → NginxAccess_CL (Log Analytics Workspace)
     → Microsoft Sentinel
 ```
+### Analytics Rules
+Analytics rules deployed in Microsoft Sentinel to detect the simulated attacks. Rules are maintained as code and can be imported from [analytics-rules](./analytics-rules) folder.
+
+![analytics rules](/screenshots/Analytics_Rules.png)
 
 ## Repository Structure
 
@@ -119,6 +128,11 @@ soc-home-lab/
 │   ├── XSS.md
 │   ├── path_traversal.md
 │   
+├── analytics-rules/
+│   ├── PathTraversal_rule.json
+│   ├── SQLI_rule.json
+│   ├── XSS_rule.json
+│
 └── screenshots/
     ├── attack_map.png
     ├── azure_architecture.png
@@ -140,8 +154,3 @@ soc-home-lab/
 - Nginx 1.24.0
 - Kali Linux (SQLmap, Burp Suite, ffuf)
 
----
-
-## Status
-
-Work in Progress

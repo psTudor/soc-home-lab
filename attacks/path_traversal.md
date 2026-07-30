@@ -34,7 +34,6 @@ ffuf -u "http://[VM-IP]/ftp/FUZZ" -w /usr/share/wordlists/dirb/common.txt -fc 40
 
 ## Attack Screenshots
 
-<!-- Save screenshots in the screenshots/ folder and update filenames accordingly -->
 ![fuff tool](/screenshots/traversal_ffuf.png)
 *Attack automated with ffuf tool*
 ---
@@ -43,25 +42,36 @@ ffuf -u "http://[VM-IP]/ftp/FUZZ" -w /usr/share/wordlists/dirb/common.txt -fc 40
 
 ### Detection Results
 
-| Metric | Value |
+| Metric | Value | Description |
+|---|---|---|
+| Attack detected? | Yes | The attack was successfully identified via Nginx logs |
+| Total traversal requests generated | 2 | Total HTTP requests sent via curl and ffuf fuzzing the /ftp/ endpoint |
+| Malicious Events Logged | 2 | Requests containing visible path traversal patterns (../, %2e%2e) in the Nginx Logs |
+| Detection Rate | 100% | Both malicious events logged in the SIEM were successfully detected by the KQL query |
+| False positives | 0 | No legitimate traffic was flagged as malicious during the testing window |
+| MTTD (Mean Time to Detect) | ~15 minutes | Time from attack execution to incident generation (based on the Scheduled Analytics Rule frequency) |
+
+### Analytics Rule Configuration
+
+| Setting | Value |
 |---|---|
-| Attack detected? | Yes |
-| Time to detection | 10 minutes |
-| Events generated | 2 events in LAW |
-| False positives | None |
+| Rule Type | Scheduled Analytics Rule |
+| Rule Name | Path Traversal Detection |
+| Severity | High |
+| Tactics (MITRE ATT&CK) | Discovery, InitialAccess |
+| Query frequency | 15 minutes |
+| Query period | 15 minutes |
+| Trigger threshold | greater than 1 |
 
 ### Sentinel Screenshots
 
 ![kql_traversal](/screenshots/traversal_kql.png)
 *The KQL used to detect the attack*
 
-![traversal_incident](/screenshots/traversal_incidents.png)
-*The attack was detected by Detection Rule and generated an incident*
-
 ---
 
 ## Conclusion
 
-Sentinel successfully detected the path traversal attack by parsing Nginx logs for ../ and encoded variants within approximately 10 minutes. The custom KQL query identified the malicious file retrieval requests targeting the /ftp/ endpoint, which served as the primary detection indicator since HTTP access logs capture the requested URI. A potential improvement would be deploying a Web Application Firewall (WAF) like ModSecurity to actively block path traversal sequences in real time before they reach the backend application.
+Sentinel successfully detected the path traversal attack by parsing Nginx logs for ../ and encoded variants within approximately 15 minutes. The custom KQL query identified the malicious file retrieval requests targeting the /ftp/ endpoint, which served as the primary detection indicator since HTTP access logs capture the requested URI. A potential improvement would be deploying a Web Application Firewall (WAF) like ModSecurity to actively block path traversal sequences in real time before they reach the backend application.
 
 

@@ -1,0 +1,59 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workspace": {
+            "type": "String"
+        }
+    },
+    "resources": [
+        {
+            "id": "[concat(resourceId('Microsoft.OperationalInsights/workspaces/providers', parameters('workspace'), 'Microsoft.SecurityInsights'),'/alertRules/6343fb05-a7f3-48bf-aae5-b4d0479dfd89')]",
+            "name": "[concat(parameters('workspace'),'/Microsoft.SecurityInsights/6343fb05-a7f3-48bf-aae5-b4d0479dfd89')]",
+            "type": "Microsoft.OperationalInsights/workspaces/providers/alertRules",
+            "kind": "Scheduled",
+            "apiVersion": "2023-12-01-preview",
+            "properties": {
+                "displayName": "Path Traversal Detection",
+                "description": "Detects path traversal attempts (../, ..\\\\, etc.) targeting sensitive files via Nginx.",
+                "severity": "High",
+                "enabled": true,
+                "query": "\r\nNginxAccess_CL\r\n| where TimeGenerated > ago(15m)\r\n| parse RawData with \r\n    ClientIP: string \" - \" *\r\n    \" \\\"\" Method: string \" \" RequestURI: string \" HTTP/\" *\r\n    \"\\\" \" StatusCode: int \" \" *\r\n| where RequestURI has \"../\" \r\n   or RequestURI has \"..\\\\\"\r\n   or RequestURI has \"%2e%2e\" \r\n   or RequestURI has \"/etc/passwd\"\r\n| summarize AttemptCount = count() by ClientIP, bin(TimeGenerated, 5m)\r\n| where AttemptCount > 1\r\n| project TimeGenerated, ClientIP, AttemptCount",
+                "queryFrequency": "PT15M",
+                "queryPeriod": "PT15M",
+                "triggerOperator": "GreaterThan",
+                "triggerThreshold": 0,
+                "suppressionDuration": "PT5H",
+                "suppressionEnabled": false,
+                "startTimeUtc": null,
+                "tactics": [
+                    "Discovery",
+                    "InitialAccess"
+                ],
+                "techniques": [],
+                "subTechniques": [],
+                "alertRuleTemplateName": null,
+                "incidentConfiguration": {
+                    "createIncident": true,
+                    "groupingConfiguration": {
+                        "enabled": false,
+                        "reopenClosedIncident": false,
+                        "lookbackDuration": "PT5H",
+                        "matchingMethod": "AllEntities",
+                        "groupByEntities": [],
+                        "groupByAlertDetails": [],
+                        "groupByCustomDetails": []
+                    }
+                },
+                "eventGroupingSettings": {
+                    "aggregationKind": "AlertPerResult"
+                },
+                "alertDetailsOverride": null,
+                "customDetails": null,
+                "entityMappings": null,
+                "sentinelEntitiesMappings": null,
+                "templateVersion": null
+            }
+        }
+    ]
+}

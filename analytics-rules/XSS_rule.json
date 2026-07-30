@@ -1,0 +1,59 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workspace": {
+            "type": "String"
+        }
+    },
+    "resources": [
+        {
+            "id": "[concat(resourceId('Microsoft.OperationalInsights/workspaces/providers', parameters('workspace'), 'Microsoft.SecurityInsights'),'/alertRules/ce417b06-8cb5-463f-9d27-f93356f731d0')]",
+            "name": "[concat(parameters('workspace'),'/Microsoft.SecurityInsights/ce417b06-8cb5-463f-9d27-f93356f731d0')]",
+            "type": "Microsoft.OperationalInsights/workspaces/providers/alertRules",
+            "kind": "Scheduled",
+            "apiVersion": "2023-12-01-preview",
+            "properties": {
+                "displayName": "XSS Detection",
+                "description": "Detects XSS payload  in Nginx  logs",
+                "severity": "High",
+                "enabled": true,
+                "query": "NginxAccess_CL\r\n| where RawData contains \"<script>\"\r\n    or RawData contains \"alert(\"\r\n    or RawData contains \"javascript:\"\r\n    or RawData contains \"onerror=\"\r\n    or RawData contains \"onload=\"\r\n| extend AttackerIP = extract(@\"^(\\S+)\", 1, RawData)\r\n| extend Request = extract(@'\"([^\"]+)\"', 1, RawData)\r\n| project TimeGenerated, AttackerIP, Request",
+                "queryFrequency": "PT15M",
+                "queryPeriod": "PT15M",
+                "triggerOperator": "GreaterThan",
+                "triggerThreshold": 0,
+                "suppressionDuration": "PT5H",
+                "suppressionEnabled": false,
+                "startTimeUtc": null,
+                "tactics": [
+                    "Execution",
+                    "InitialAccess"
+                ],
+                "techniques": [],
+                "subTechniques": [],
+                "alertRuleTemplateName": null,
+                "incidentConfiguration": {
+                    "createIncident": true,
+                    "groupingConfiguration": {
+                        "enabled": false,
+                        "reopenClosedIncident": false,
+                        "lookbackDuration": "PT5H",
+                        "matchingMethod": "AllEntities",
+                        "groupByEntities": [],
+                        "groupByAlertDetails": [],
+                        "groupByCustomDetails": []
+                    }
+                },
+                "eventGroupingSettings": {
+                    "aggregationKind": "SingleAlert"
+                },
+                "alertDetailsOverride": null,
+                "customDetails": null,
+                "entityMappings": null,
+                "sentinelEntitiesMappings": null,
+                "templateVersion": null
+            }
+        }
+    ]
+}

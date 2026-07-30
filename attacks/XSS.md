@@ -48,18 +48,33 @@ img onerror payload in JuiceShop search bar*
 
 ### Detection Results
 
-| Metric | Value |
+| Metric | Value | Description |
+|---|---|---|
+| Attack detected? | Yes | The attack was successfully identified via Nginx logs |
+| Total XSS requests generated | 2 | Total HTTP requests containing script tags or encoded payloads sent against search/login fields |
+| Malicious Events Logged | 2 | Requests containing visible XSS patterns in the URL parameters within the Nginx Logs |
+| Detection Rate | 100% | Both malicious events logged in the SIEM were successfully detected by the KQL query |
+| False positives | 0 | No legitimate traffic was flagged as malicious during the testing window |
+| MTTD (Mean Time to Detect) | ~15 minutes | Time from attack execution to incident generation (based on the Scheduled Analytics Rule frequency) |
+
+### Analytics Rule Configuration
+
+| Setting | Value |
 |---|---|
-| Attack detected? | Yes, Analytics Rule triggered |
-| Time to detection | 8 minutes |
-| Events generated | 2 events in LAW |
-| False positives | None |
+| Rule Type | Scheduled Analytics Rule |
+| Rule Name | XSS Detection |
+| Severity | High |
+| Tactics (MITRE ATT&CK) | Execution, InitialAccess |
+| Query frequency | 15 minutes |
+| Query period | 15 minutes |
+| Trigger threshold | greater than 1 |
+
 
 ### Sentinel Screenshots
 
 ![XSS Detection in Sentinel](/screenshots/XSS_alerts.png)
 *Analytics Rule detected both XSS payloads. Script tag attempt 
-(4:30 PM) and img onerror bypass (4:33 PM) visible in NginxAccess_CL*
+and img onerror bypass visible in NginxAccess_CL*
 
 ---
 

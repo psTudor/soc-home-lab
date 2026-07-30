@@ -62,13 +62,27 @@ sqlmap -r ~/login.txt \
 
 ### Detection Results
 
-| Metric | Value |
+| Metric | Value | Descrpition |
+|---|---|---|
+| Attack detected? | Yes | The attack was successfully identified via Nginx logs |
+| Total login requests generated | 548 | 	Total HTTP requests sent by SQLmap against the login endpoint |
+| Malicious Events Logged | 4 | Requests containing visible SQLi patterns in the Nginx Logs |
+| Detection Rate | 100% | All 4 malicious events logged in the SIEM were successfully detected by the KQL query |
+| False positives | 0 | No legitimate traffic was flagged as malicious during the testing window |
+| MTTD (Mean Time to Detect) | ~15 minutes | Time from attack execution to incident generation (based on the Scheduled Analytics Rule frequency) |
+
+### Analytics Rule Configuration
+
+| Setting | Value |
 |---|---|
-| Attack detected? | Yes, via NginxAccess_CL status code pattern  |
-| Time to detection | Manual KQL query, no automated rule configured  |
-| Total login requests generated | 548 |
-| Requests with SQLi patterns detected | 4 |
-| False positives | None |
+| Rule Type | Scheduled Analytics Rule |
+| Rule Name | SQL Injection Detection |
+| Severity | High |
+| Tactics ( MITRE ATT&CK) | InitialAccess |
+| Query frequency | 15 minutes |
+| Query period | 15 minutes |
+| Trigger threshold | greater than 2 |
+
 
 ### Sentinel Screenshots
 

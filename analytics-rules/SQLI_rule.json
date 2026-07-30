@@ -1,0 +1,58 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workspace": {
+            "type": "String"
+        }
+    },
+    "resources": [
+        {
+            "id": "[concat(resourceId('Microsoft.OperationalInsights/workspaces/providers', parameters('workspace'), 'Microsoft.SecurityInsights'),'/alertRules/261c47fb-672a-4307-a21a-788b268ef992')]",
+            "name": "[concat(parameters('workspace'),'/Microsoft.SecurityInsights/261c47fb-672a-4307-a21a-788b268ef992')]",
+            "type": "Microsoft.OperationalInsights/workspaces/providers/alertRules",
+            "kind": "Scheduled",
+            "apiVersion": "2023-12-01-preview",
+            "properties": {
+                "displayName": "SQL Injection Detection",
+                "description": "",
+                "severity": "High",
+                "enabled": true,
+                "query": "NginxAccess_CL\r\n| where TimeGenerated > ago(7d)\r\n| where RawData contains \"/rest/user/login\"\r\n// Extract IP address (first word before the space)\r\n| extend AttackerIP = extract(@\"^(\\S+)\", 1, RawData)\r\n// Extract HTTP Status Code (3 digits after the quote and space)\r\n| extend StatusCode = extract(@'\" (\\d{3})', 1, RawData)\r\n// Count requests per IP, per Status Code, in 5-minute windows\r\n| summarize Requests = count() by AttackerIP, StatusCode, bin(TimeGenerated, 5m)\r\n// Analytics Rule threshold: trigger alert if more than 2 attempts\r\n| where Requests > 2\r\n| order by Requests desc",
+                "queryFrequency": "PT15M",
+                "queryPeriod": "PT15M",
+                "triggerOperator": "GreaterThan",
+                "triggerThreshold": 2,
+                "suppressionDuration": "PT5H",
+                "suppressionEnabled": false,
+                "startTimeUtc": null,
+                "tactics": [
+                    "InitialAccess"
+                ],
+                "techniques": [],
+                "subTechniques": [],
+                "alertRuleTemplateName": null,
+                "incidentConfiguration": {
+                    "createIncident": true,
+                    "groupingConfiguration": {
+                        "enabled": false,
+                        "reopenClosedIncident": false,
+                        "lookbackDuration": "PT5H",
+                        "matchingMethod": "AllEntities",
+                        "groupByEntities": [],
+                        "groupByAlertDetails": [],
+                        "groupByCustomDetails": []
+                    }
+                },
+                "eventGroupingSettings": {
+                    "aggregationKind": "AlertPerResult"
+                },
+                "alertDetailsOverride": null,
+                "customDetails": null,
+                "entityMappings": null,
+                "sentinelEntitiesMappings": null,
+                "templateVersion": null
+            }
+        }
+    ]
+}
