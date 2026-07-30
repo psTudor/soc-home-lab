@@ -40,6 +40,7 @@ Microsoft Sentinel (SIEM)
 **Data Connectors**
 
 ![Data Connectors](screenshots/custom_logs.png)
+*Active data connectors including Custom Logs via AMA for Nginx log ingestion*
 
 **Azure Components:**
 
@@ -98,8 +99,11 @@ Each attack is documented in [attacks](./attacks) with:
   
 ### MITRE ATT&CK Coverage
 
-Visual detection coverage against the MITRE framework.
-![MITRE Coverage](./screenshots/MITRE%20coverage.png)
+A custom Sentinel Workbook was built to visualize detection coverage 
+across MITRE ATT&CK techniques.
+![MITRE Coverage](./screenshots/MITRE_coverage.png)
+*Custom workbook showing 50% detection coverage across identified 
+attack techniques, with a color-coded breakdown by tactic and technique*
 
 ---
 
@@ -154,3 +158,7 @@ soc-home-lab/
 - Nginx 1.24.0
 - Kali Linux (SQLmap, Burp Suite, ffuf)
 
+## Status
+
+Core lab complete. 3 attack classes documented with active 
+detection rules and MITRE ATT&CK coverage dashboard.
